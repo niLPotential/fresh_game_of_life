@@ -1,6 +1,7 @@
 import { useState } from "preact/hooks";
 import { BoardGrid } from "../components/Board.tsx";
 import { Button } from "../components/Button.tsx";
+import { denoTemplate, freshTemplate } from "../static/template.ts";
 
 const totalBoardRows = 10;
 const totalBoardColumns = 10;
@@ -18,6 +19,15 @@ const newBoardStatus = (cellStatus = () => Math.random() < 0.3) => {
     for (let c = 0; c < totalBoardColumns; c++) {
       grid[r][c] = cellStatus();
     }
+  }
+  return grid;
+};
+
+const templateBoardStatus = (template: number[][]) => {
+  const grid = newBoardStatus(() => false);
+
+  for (const index of template) {
+    grid[index[0]][index[1]] = true;
   }
   return grid;
 };
@@ -100,35 +110,72 @@ export default function GameOfLife() {
   return (
     <div>
       <BoardGrid boardState={state} onToggleCellStatus={handleToggleStatus} />
-      <Button
-        onClick={() =>
-          setState({
-            ...state,
-            isGameRunning: !state.isGameRunning,
-          })}
-      >
-        Auto
-      </Button>
-      <Button>New</Button>
-      <Button
-        onClick={() => {
-          handleUpdate();
-        }}
-      >
-        Next
-      </Button>
-      <Button
-        onClick={() =>
-          setState({
-            ...state,
-            generation: 0,
-            boardStatus: newBoardStatus(() => false),
-          })}
-      >
-        Clear
-      </Button>
-      <Button>Deno</Button>
-      <Button>Fresh</Button>
+
+      <div>
+        <Button>Gen {state.generation}</Button>
+        <Button
+          onClick={() =>
+            setState({
+              ...state,
+              isGameRunning: !state.isGameRunning,
+            })}
+        >
+          Auto
+        </Button>
+
+        <Button
+          onClick={() => {
+            setState({
+              ...state,
+              generation: 0,
+              boardStatus: newBoardStatus(),
+            });
+          }}
+        >
+          New
+        </Button>
+
+        <Button
+          onClick={() => {
+            handleUpdate();
+          }}
+        >
+          Next
+        </Button>
+
+        <Button
+          onClick={() =>
+            setState({
+              ...state,
+              generation: 0,
+              boardStatus: newBoardStatus(() => false),
+            })}
+        >
+          Clear
+        </Button>
+
+        <Button
+          onClick={() =>
+            setState({
+              ...state,
+              generation: 0,
+              boardStatus: templateBoardStatus(denoTemplate),
+            })}
+        >
+          Deno
+        </Button>
+
+        <Button
+          onClick={() =>
+            setState({
+              ...state,
+              generation: 0,
+              boardStatus: templateBoardStatus(freshTemplate),
+            })}
+        >
+          Fresh
+        </Button>
+      </div>
     </div>
   );
 }

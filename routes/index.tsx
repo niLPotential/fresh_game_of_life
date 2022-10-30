@@ -25,14 +25,22 @@ export default function Home() {
           Based on this freeCodeCamp article
         </a>
 
-        <a href="https://fresh.deno.dev">
-          <img
-            width="197"
-            height="37"
-            src="https://fresh.deno.dev/fresh-badge-dark.svg"
-            alt="Made with Fresh"
-          />
-        </a>
+        <div className="flex">
+          <a href="https://fresh.deno.dev" target="_blank">
+            <img
+              width="197"
+              height="37"
+              src="https://fresh.deno.dev/fresh-badge-dark.svg"
+              alt="Made with Fresh"
+            />
+          </a>
+          <a
+            href="https://github.com/niLPotential/fresh_game_of_life"
+            target="_blank"
+          >
+            <img src="/GitHub-Mark-Light-32px.png" alt="GitHub" />
+          </a>
+        </div>
       </main>
     </div>
   );

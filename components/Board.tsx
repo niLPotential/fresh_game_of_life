@@ -28,7 +28,6 @@ export function BoardGrid(props: BoardProps) {
   return (
     <table>
       <tbody>{tr}</tbody>
-      <p>{props.boardState.generation}</p>
     </table>
   );
 }
