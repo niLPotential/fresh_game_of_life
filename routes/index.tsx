@@ -16,6 +16,7 @@ export default function Home() {
         </a>
 
         <GameOfLife />
+
         <a
           href="https://www.freecodecamp.org/news/coding-the-game-of-life-with-react-7de2385b7356/"
           target="_blank"
