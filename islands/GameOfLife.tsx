@@ -1,6 +1,7 @@
-import { useState } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 import { BoardGrid } from "../components/Board.tsx";
 import { Button } from "../components/Button.tsx";
+import { Slider } from "../components/Slider.tsx";
 import { denoTemplate, freshTemplate } from "../static/template.ts";
 
 const totalBoardRows = 10;
@@ -10,6 +11,7 @@ export interface BoardState {
   boardStatus: boolean[][];
   generation: number;
   isGameRunning: boolean;
+  speed: number;
 }
 
 const newBoardStatus = (cellStatus = () => Math.random() < 0.3) => {
@@ -37,141 +39,174 @@ export default function GameOfLife() {
     boardStatus: newBoardStatus(),
     generation: 0,
     isGameRunning: false,
+    speed: 500,
   };
 
   const [state, setState] = useState(initialState);
 
-  const handleToggleStatus = (r: number, c: number) => {
-    const toggleBoardStatus = (boardStatus: BoardState["boardStatus"]) => {
-      const toggledBoardStatus = JSON.parse(JSON.stringify(boardStatus));
-      toggledBoardStatus[r][c] = !toggledBoardStatus[r][c];
-      return toggledBoardStatus;
-    };
+  const runStopButton = () => {
+    return state.isGameRunning
+      ? <Button onClick={handleStop}>Stop</Button>
+      : <Button onClick={handleRun}>Start</Button>;
+  };
+
+  const handleClearBoard = () =>
     setState({
       ...state,
-      boardStatus: toggleBoardStatus(state.boardStatus),
+      boardStatus: newBoardStatus(() => false),
+      generation: 0,
+      isGameRunning: false,
+    });
+
+  const handleNewBoard = () => {
+    setState({
+      ...state,
+      boardStatus: newBoardStatus(),
+      generation: 0,
+      isGameRunning: false,
     });
   };
 
-  const handleUpdate = () => {
+  const handleTemplateBoard = (template: number[][]) => {
+    setState({
+      ...state,
+      boardStatus: templateBoardStatus(template),
+      generation: 0,
+      isGameRunning: false,
+    });
+  };
+
+  const handleToggleStatus = (r: number, c: number) => {
+    const toggleBoardStatus = (prevStatus: BoardState["boardStatus"]) => {
+      const clonedBoardStatus = JSON.parse(JSON.stringify(prevStatus));
+      clonedBoardStatus[r][c] = !clonedBoardStatus[r][c];
+      return clonedBoardStatus;
+    };
+
+    setState((prevState) => ({
+      ...state,
+      boardStatus: toggleBoardStatus(prevState["boardStatus"]),
+    }));
+  };
+
+  const handleStep = () => {
     const nextStep = (boardStatus: BoardState["boardStatus"]) => {
-      const nextBoardStatus: BoardState["boardStatus"] = JSON.parse(
+      const clonedBoardStatus: BoardState["boardStatus"] = JSON.parse(
         JSON.stringify(boardStatus),
       );
 
-      const countAliveNeighbors = (r: number, c: number) => {
+      const amountTrueNeighbors = (r: number, c: number) => {
         const neighbors = [[-1, -1], [-1, 0], [-1, 1], [0, 1], [1, 1], [1, 0], [
           1,
           -1,
         ], [0, -1]];
-        return neighbors.reduce((aliveNeighbors, neighbor) => {
+        return neighbors.reduce((trueNeighbors, neighbor) => {
           const x = r + neighbor[0];
           const y = c + neighbor[1];
-          const isNeighborOnBoard =
-            (x >= 0 && x < totalBoardRows && y >= 0 && y < totalBoardColumns);
-          if (isNeighborOnBoard && boardStatus[x][y]) {
-            return aliveNeighbors + 1;
+          const isNeighborOnBoard = x >= 0 && x < totalBoardRows && y >= 0 &&
+            y < totalBoardColumns;
+          if (trueNeighbors < 4 && isNeighborOnBoard && boardStatus[x][y]) {
+            return trueNeighbors + 1;
           } else {
-            return aliveNeighbors;
+            return trueNeighbors;
           }
         }, 0);
       };
 
       for (let r = 0; r < totalBoardRows; r++) {
         for (let c = 0; c < totalBoardColumns; c++) {
-          const aliveNeighborsCount = countAliveNeighbors(r, c);
+          const totalTrueNeighbors = amountTrueNeighbors(r, c);
 
-          if (boardStatus[r][c]) {
-            if (aliveNeighborsCount < 2 || aliveNeighborsCount > 3) {
-              nextBoardStatus[r][c] = false;
+          if (!boardStatus[r][c]) {
+            if (totalTrueNeighbors === 3) {
+              clonedBoardStatus[r][c] = true;
             }
           } else {
-            if (aliveNeighborsCount === 3) {
-              nextBoardStatus[r][c] = true;
+            if (totalTrueNeighbors < 2 || totalTrueNeighbors > 3) {
+              clonedBoardStatus[r][c] = false;
             }
           }
         }
       }
 
-      return nextBoardStatus;
+      return clonedBoardStatus;
     };
 
-    const nextBoardStatus = nextStep(
-      state.boardStatus,
-    );
-
-    setState({
+    setState((prevState) => ({
       ...state,
-      boardStatus: nextBoardStatus,
-      generation: state.generation + 1,
-    });
+      boardStatus: nextStep(
+        prevState["boardStatus"],
+      ),
+      generation: prevState.generation + 1,
+    }));
   };
+
+  const handleSpeedChange = (newSpeed: number) => {
+    setState({ ...state, speed: newSpeed });
+  };
+
+  const handleRun = () => {
+    setState({ ...state, isGameRunning: true });
+  };
+
+  const handleStop = () => {
+    setState({ ...state, isGameRunning: false });
+  };
+
+  useEffect(() => {
+    let timerID = 0;
+    if (state.isGameRunning) {
+      timerID = setInterval(() => handleStep(), state.speed);
+    }
+    return () => clearInterval(timerID);
+  });
 
   return (
     <div>
-      <BoardGrid boardState={state} onToggleCellStatus={handleToggleStatus} />
+      <BoardGrid
+        boardStatus={state.boardStatus}
+        onToggleCellStatus={handleToggleStatus}
+      />
 
       <div>
-        <Button>Gen {state.generation}</Button>
-        <Button
-          onClick={() =>
-            setState({
-              ...state,
-              isGameRunning: !state.isGameRunning,
-            })}
-        >
-          Auto
-        </Button>
+        <span>
+          {"+ "}
+          <Slider speed={state.speed} onSpeedChange={handleSpeedChange} />
+          {" -"}
+        </span>
+        {`Generation: ${state.generation}`}
+      </div>
+
+      <div>
+        {runStopButton()}
 
         <Button
-          onClick={() => {
-            setState({
-              ...state,
-              generation: 0,
-              boardStatus: newBoardStatus(),
-            });
-          }}
-        >
-          New
-        </Button>
-
-        <Button
-          onClick={() => {
-            handleUpdate();
-          }}
+          disabled={state.isGameRunning}
+          onClick={handleStep}
         >
           Next
         </Button>
 
         <Button
-          onClick={() =>
-            setState({
-              ...state,
-              generation: 0,
-              boardStatus: newBoardStatus(() => false),
-            })}
+          onClick={handleClearBoard}
         >
           Clear
         </Button>
 
         <Button
-          onClick={() =>
-            setState({
-              ...state,
-              generation: 0,
-              boardStatus: templateBoardStatus(denoTemplate),
-            })}
+          onClick={handleNewBoard}
+        >
+          New
+        </Button>
+
+        <Button
+          onClick={() => handleTemplateBoard(denoTemplate)}
         >
           Deno
         </Button>
 
         <Button
-          onClick={() =>
-            setState({
-              ...state,
-              generation: 0,
-              boardStatus: templateBoardStatus(freshTemplate),
-            })}
+          onClick={() => handleTemplateBoard(freshTemplate)}
         >
           Fresh
         </Button>
