@@ -1,11 +1,11 @@
 import { Head } from "$fresh/runtime.ts";
 import GameOfLife from "../islands/GameOfLife.tsx";
-import IconSunMoon from "https://deno.land/x/tabler_icons_tsx@0.0.2/tsx/sun-moon.tsx";
+import DarkMode from "../islands/DarkMode.tsx";
 import IconBrandGithub from "https://deno.land/x/tabler_icons_tsx@0.0.2/tsx/brand-github.tsx";
 
 export default function Home() {
   return (
-    <div className="flex flex-col h-screen justify-center items-center font-mono dark:bg-gray-800 dark:text-white">
+    <div className="flex flex-col h-screen justify-center items-center font-mono bg-gray-300 dark:bg-gray-800 dark:text-white">
       <Head>
         <title>Fresh Game of Life</title>
       </Head>
@@ -31,7 +31,7 @@ export default function Home() {
         <GameOfLife />
 
         <div className="flex justify-around items-center">
-          <IconSunMoon />
+          <DarkMode />
           <a href="https://fresh.deno.dev" target="_blank">
             <img
               width="197"
