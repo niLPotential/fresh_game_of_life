@@ -1,31 +1,37 @@
 import { Head } from "$fresh/runtime.ts";
 import GameOfLife from "../islands/GameOfLife.tsx";
+import IconSunMoon from "https://deno.land/x/tabler_icons_tsx@0.0.2/tsx/sun-moon.tsx";
+import IconBrandGithub from "https://deno.land/x/tabler_icons_tsx@0.0.2/tsx/brand-github.tsx";
 
 export default function Home() {
   return (
-    <div>
+    <div className="flex flex-col h-screen justify-center items-center font-mono dark:bg-gray-800 dark:text-white">
       <Head>
         <title>Fresh Game of Life</title>
       </Head>
-      <main className="flex flex-col h-screen items-center bg-gray-800 text-white">
+      <div className="mb-5">
         <a
+          className=" text-2xl hover:text-blue-500"
           href="https://en.wikipedia.org/wiki/Conway's_Game_of_Life"
           target="_blank"
         >
           Conway's Game of Life
         </a>
-
-        <GameOfLife />
-
+        <br />
         <a
+          className="hover:text-blue-500"
           href="https://www.freecodecamp.org/news/coding-the-game-of-life-with-react-7de2385b7356/"
           target="_blank"
-          className="hover:text-blue-500"
         >
           Based on this freeCodeCamp article
         </a>
+      </div>
 
-        <div className="flex">
+      <div>
+        <GameOfLife />
+
+        <div className="flex justify-around items-center">
+          <IconSunMoon />
           <a href="https://fresh.deno.dev" target="_blank">
             <img
               width="197"
@@ -38,10 +44,10 @@ export default function Home() {
             href="https://github.com/niLPotential/fresh_game_of_life"
             target="_blank"
           >
-            <img src="/GitHub-Mark-Light-32px.png" alt="GitHub" />
+            <IconBrandGithub />
           </a>
         </div>
-      </main>
+      </div>
     </div>
   );
 }
