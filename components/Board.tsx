@@ -17,7 +17,7 @@ export function BoardGrid(props: BoardProps) {
         <td
           key={`${rowIndex},${columnIndex}`}
           className={`border-1 w-10 h-10 ${
-            cell ? "bg-black  hover:bg-red-600" : "bg-white hover:bg-gray-600"
+            cell ? "bg-black  hover:bg-red-500" : "bg-white hover:bg-gray-500"
           }`}
           onClick={() => handleClick(rowIndex, columnIndex)}
         />,
