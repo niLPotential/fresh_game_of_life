@@ -3,6 +3,8 @@ import { BoardGrid } from "../components/Board.tsx";
 import { Button } from "../components/Button.tsx";
 import { Slider } from "../components/Slider.tsx";
 import { denoTemplate, freshTemplate } from "../static/template.ts";
+import IconPlus from "https://deno.land/x/tabler_icons_tsx@0.0.2/tsx/plus.tsx";
+import IconMinus from "https://deno.land/x/tabler_icons_tsx@0.0.2/tsx/minus.tsx";
 
 const totalBoardRows = 10;
 const totalBoardColumns = 10;
@@ -51,29 +53,29 @@ export default function GameOfLife() {
   };
 
   const handleClearBoard = () =>
-    setState({
-      ...state,
+    setState((prevState) => ({
+      ...prevState,
       boardStatus: newBoardStatus(() => false),
       generation: 0,
       isGameRunning: false,
-    });
+    }));
 
   const handleNewBoard = () => {
-    setState({
-      ...state,
+    setState((prevState) => ({
+      ...prevState,
       boardStatus: newBoardStatus(),
       generation: 0,
       isGameRunning: false,
-    });
+    }));
   };
 
   const handleTemplateBoard = (template: number[][]) => {
-    setState({
-      ...state,
+    setState((prevState) => ({
+      ...prevState,
       boardStatus: templateBoardStatus(template),
       generation: 0,
       isGameRunning: false,
-    });
+    }));
   };
 
   const handleToggleStatus = (r: number, c: number) => {
@@ -84,7 +86,7 @@ export default function GameOfLife() {
     };
 
     setState((prevState) => ({
-      ...state,
+      ...prevState,
       boardStatus: toggleBoardStatus(prevState["boardStatus"]),
     }));
   };
@@ -133,7 +135,7 @@ export default function GameOfLife() {
     };
 
     setState((prevState) => ({
-      ...state,
+      ...prevState,
       boardStatus: nextStep(
         prevState["boardStatus"],
       ),
@@ -142,15 +144,15 @@ export default function GameOfLife() {
   };
 
   const handleSpeedChange = (newSpeed: number) => {
-    setState({ ...state, speed: newSpeed });
+    setState((prevState) => ({ ...prevState, speed: newSpeed }));
   };
 
   const handleRun = () => {
-    setState({ ...state, isGameRunning: true });
+    setState((prevState) => ({ ...prevState, isGameRunning: true }));
   };
 
   const handleStop = () => {
-    setState({ ...state, isGameRunning: false });
+    setState((prevState) => ({ ...prevState, isGameRunning: false }));
   };
 
   useEffect(() => {
@@ -168,16 +170,20 @@ export default function GameOfLife() {
         onToggleCellStatus={handleToggleStatus}
       />
 
-      <div>
-        <span>
-          {"+ "}
-          <Slider speed={state.speed} onSpeedChange={handleSpeedChange} />
-          {" -"}
-        </span>
-        {`Generation: ${state.generation}`}
+      <div className="flex justify-between my-2.5">
+        <IconPlus
+          onClick={() => handleSpeedChange(Math.max(state.speed - 50, 50))}
+        />
+        <Slider speed={state.speed} onSpeedChange={handleSpeedChange} />
+        <IconMinus
+          onClick={() => handleSpeedChange(Math.min(state.speed + 50, 1000))}
+        />
+        <div className="text-lg">
+          {`Generation: ${state.generation}`}
+        </div>
       </div>
 
-      <div>
+      <div className="flex justify-between my-2.5">
         {runStopButton()}
 
         <Button
