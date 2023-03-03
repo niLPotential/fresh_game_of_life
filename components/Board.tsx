@@ -16,8 +16,8 @@ export function BoardGrid(props: BoardProps) {
       td.push(
         <td
           key={`${rowIndex},${columnIndex}`}
-          className={`border-1 w-10 h-10 ${
-            cell ? "bg-black  hover:bg-red-500" : "bg-white hover:bg-gray-500"
+          className={`border w-8 h-8 sm:w-10 sm:h-10 ${
+            cell ? "bg-black hover:bg-red-500" : "bg-white hover:bg-gray-500"
           }`}
           onClick={() => handleClick(rowIndex, columnIndex)}
         />,
@@ -27,7 +27,7 @@ export function BoardGrid(props: BoardProps) {
   });
 
   return (
-    <table>
+    <table className="flex justify-center">
       <tbody>{tr}</tbody>
     </table>
   );

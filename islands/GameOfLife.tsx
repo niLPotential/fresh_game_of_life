@@ -170,20 +170,22 @@ export default function GameOfLife() {
         onToggleCellStatus={handleToggleStatus}
       />
 
-      <div className="flex justify-between my-2.5">
-        <IconPlus
-          onClick={() => handleSpeedChange(Math.max(state.speed - 50, 50))}
-        />
-        <Slider speed={state.speed} onSpeedChange={handleSpeedChange} />
-        <IconMinus
-          onClick={() => handleSpeedChange(Math.min(state.speed + 50, 1000))}
-        />
-        <div className="text-lg">
-          {`Generation: ${state.generation}`}
+      <div className="flex justify-around my-2.5">
+        <div className="flex text-xs sm:text-base">
+          <IconPlus
+            onClick={() => handleSpeedChange(Math.max(state.speed - 50, 50))}
+          />
+          <Slider speed={state.speed} onSpeedChange={handleSpeedChange} />
+          <IconMinus
+            onClick={() => handleSpeedChange(Math.min(state.speed + 50, 1000))}
+          />
+        </div>
+        <div className="text-lg sm:text-xl">
+          {`Gen: ${state.generation}`}
         </div>
       </div>
 
-      <div className="flex justify-between my-2.5">
+      <div className="flex justify-center sm:justify-between my-2.5">
         {runStopButton()}
 
         <Button

@@ -11,7 +11,7 @@ export default function Home() {
       </Head>
       <div className="mb-5">
         <a
-          className=" text-2xl hover:text-blue-500"
+          className="text-2xl hover:text-blue-500"
           href="https://en.wikipedia.org/wiki/Conway's_Game_of_Life"
           target="_blank"
         >
