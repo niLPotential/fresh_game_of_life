@@ -5,7 +5,7 @@ import IconBrandGithub from "https://deno.land/x/tabler_icons_tsx@0.0.2/tsx/bran
 
 export default function Home() {
   return (
-    <div className="flex flex-col h-screen justify-center items-center font-mono bg-gray-300 dark:bg-gray-800 dark:text-white">
+    <div className="flex flex-col h-screen justify-center items-center font-mono bg-gray-200 dark:bg-gray-700 dark:text-white">
       <Head>
         <title>Fresh Game of Life</title>
       </Head>
