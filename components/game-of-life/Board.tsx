@@ -1,5 +1,5 @@
 import { JSXInternal } from "preact/src/jsx.d.ts";
-import { BoardState } from "../islands/GameOfLife.tsx";
+import { BoardState } from "../../islands/GameOfLife.tsx";
 
 interface BoardProps {
   boardStatus: BoardState["boardStatus"];

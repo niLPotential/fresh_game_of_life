@@ -4,9 +4,9 @@ export default function Page() {
   return (
     <>
       <Head>
-        <title>Fresh 2048</title>
+        <title>Fresh Breakout</title>
       </Head>
-      <div>2048</div>
+      <div>Breakout</div>
     </>
   );
 }

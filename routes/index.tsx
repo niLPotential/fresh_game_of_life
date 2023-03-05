@@ -11,10 +11,13 @@ export default function Home() {
           <a href="game-of-life">Game of Life</a>
         </li>
         <li>
-          <a href="snake-game">Snake Game</a>
+          <a href="breakout">Breakout</a>
         </li>
         <li>
           <a href="2048">2048</a>
+        </li>
+        <li>
+          <a href="snake-game">Snake Game</a>
         </li>
       </ul>
     </>

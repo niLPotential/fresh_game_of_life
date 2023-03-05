@@ -1,7 +1,7 @@
 import { useEffect, useState } from "preact/hooks";
-import { BoardGrid } from "../components/Board.tsx";
+import { BoardGrid } from "../components/game-of-life/Board.tsx";
+import { Slider } from "../components/game-of-life/Slider.tsx";
 import { Button } from "../components/Button.tsx";
-import { Slider } from "../components/Slider.tsx";
 import { denoTemplate, freshTemplate } from "../static/template.ts";
 import IconPlus from "https://deno.land/x/tabler_icons_tsx@0.0.2/tsx/plus.tsx";
 import IconMinus from "https://deno.land/x/tabler_icons_tsx@0.0.2/tsx/minus.tsx";
