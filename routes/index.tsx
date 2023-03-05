@@ -13,6 +13,9 @@ export default function Home() {
         <li>
           <a href="snake-game">Snake Game</a>
         </li>
+        <li>
+          <a href="2048">2048</a>
+        </li>
       </ul>
     </>
   );
