@@ -9,10 +9,9 @@ import * as $2 from "./routes/game-of-life.tsx";
 import * as $3 from "./routes/index.tsx";
 import * as $4 from "./routes/snake-game.tsx";
 import * as $$0 from "./islands/Breakout.tsx";
-import * as $$1 from "./islands/Counter.tsx";
-import * as $$2 from "./islands/Footer.tsx";
-import * as $$3 from "./islands/GameOfLife.tsx";
-import * as $$4 from "./islands/SnakeGame.tsx";
+import * as $$1 from "./islands/Footer.tsx";
+import * as $$2 from "./islands/GameOfLife.tsx";
+import * as $$3 from "./islands/SnakeGame.tsx";
 
 const manifest = {
   routes: {
@@ -24,10 +23,9 @@ const manifest = {
   },
   islands: {
     "./islands/Breakout.tsx": $$0,
-    "./islands/Counter.tsx": $$1,
-    "./islands/Footer.tsx": $$2,
-    "./islands/GameOfLife.tsx": $$3,
-    "./islands/SnakeGame.tsx": $$4,
+    "./islands/Footer.tsx": $$1,
+    "./islands/GameOfLife.tsx": $$2,
+    "./islands/SnakeGame.tsx": $$3,
   },
   baseUrl: import.meta.url,
   config,

@@ -18,9 +18,12 @@ export default function DarkMode() {
   }, [isDarkMode]);
 
   return (
-    <div className="flex my-5">
+    <div className="flex my-5 justify-evenly sm:justify-around">
       <IconSunMoon onClick={handleDarkMode} />
-      <a className="relative w-full" href="https://fresh.deno.dev">
+      <a
+        className="relative w-2/3 sm:w-1/2"
+        href="https://fresh.deno.dev"
+      >
         <img
           className="absolute inset-0 m-auto transition-opacity opacity-0 dark:opacity-100"
           width="197"
