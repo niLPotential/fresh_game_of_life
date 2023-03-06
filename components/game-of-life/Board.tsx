@@ -1,4 +1,4 @@
-import { JSXInternal } from "preact/src/jsx.d.ts";
+import { JSX } from "preact";
 import { BoardState } from "../../islands/GameOfLife.tsx";
 
 interface BoardProps {
@@ -9,9 +9,9 @@ interface BoardProps {
 export function BoardGrid(props: BoardProps) {
   const handleClick = (r: number, c: number) => props.onToggleCellStatus(r, c);
 
-  const tr: JSXInternal.Element[] = [];
+  const tr: JSX.Element[] = [];
   props.boardStatus.forEach((row, rowIndex) => {
-    const td: JSXInternal.Element[] = [];
+    const td: JSX.Element[] = [];
     row.forEach((cell, columnIndex) => {
       td.push(
         <td
