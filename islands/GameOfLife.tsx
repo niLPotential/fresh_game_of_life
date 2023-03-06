@@ -2,7 +2,9 @@ import { useEffect, useState } from "preact/hooks";
 import { BoardGrid } from "../components/game-of-life/Board.tsx";
 import { Slider } from "../components/game-of-life/Slider.tsx";
 import { Button } from "../components/Button.tsx";
-import { denoTemplate, freshTemplate } from "../static/template.ts";
+import template from "../static/template.json" assert {
+  type: "json",
+};
 import IconPlus from "https://deno.land/x/tabler_icons_tsx@0.0.2/tsx/plus.tsx";
 import IconMinus from "https://deno.land/x/tabler_icons_tsx@0.0.2/tsx/minus.tsx";
 
@@ -208,13 +210,13 @@ export default function GameOfLife() {
         </Button>
 
         <Button
-          onClick={() => handleTemplateBoard(denoTemplate)}
+          onClick={() => handleTemplateBoard(template.deno)}
         >
           Deno
         </Button>
 
         <Button
-          onClick={() => handleTemplateBoard(freshTemplate)}
+          onClick={() => handleTemplateBoard(template.fresh)}
         >
           Fresh
         </Button>
