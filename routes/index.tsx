@@ -7,21 +7,23 @@ export default function Home() {
       <Head>
         <title>Fresh Game Projects</title>
       </Head>
-      <ul className="bg-gray-200 dark:bg-gray-700 dark:text-white">
-        <li>
-          <a href="game-of-life">Game of Life</a>
-        </li>
-        <li>
-          <a href="breakout">Breakout</a>
-        </li>
-        <li>
-          <a href="2048">2048</a>
-        </li>
-        <li>
-          <a href="snake-game">Snake Game</a>
-        </li>
-      </ul>
-      <Footer />
+      <body>
+        <ul className="transition-colors bg-gray-200 dark:bg-gray-700 dark:text-white">
+          <li>
+            <a href="game-of-life">Game of Life</a>
+          </li>
+          <li>
+            <a href="breakout">Breakout</a>
+          </li>
+          <li>
+            <a href="2048">2048</a>
+          </li>
+          <li>
+            <a href="snake-game">Snake Game</a>
+          </li>
+        </ul>
+        <Footer />
+      </body>
     </>
   );
 }

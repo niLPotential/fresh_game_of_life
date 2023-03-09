@@ -1,22 +1,19 @@
 import { useEffect, useState } from "preact/hooks";
 import { BoardGrid } from "../components/game-of-life/Board.tsx";
-import { Slider } from "../components/game-of-life/Slider.tsx";
 import { Button } from "../components/Button.tsx";
+import { speed } from "../lib/speed.ts";
 import template from "../static/template.json" assert {
   type: "json",
 };
-import IconPlus from "https://deno.land/x/tabler_icons_tsx@0.0.2/tsx/plus.tsx";
-import IconMinus from "https://deno.land/x/tabler_icons_tsx@0.0.2/tsx/minus.tsx";
 
 const totalBoardRows = 10;
 const totalBoardColumns = 10;
 
-export interface BoardState {
+export type BoardState = {
   boardStatus: boolean[][];
   generation: number;
   isGameRunning: boolean;
-  speed: number;
-}
+};
 
 const newBoardStatus = (cellStatus = () => Math.random() < 0.3) => {
   const grid: boolean[][] = [];
@@ -43,7 +40,6 @@ export default function GameOfLife() {
     boardStatus: newBoardStatus(),
     generation: 0,
     isGameRunning: false,
-    speed: 500,
   };
 
   const [state, setState] = useState(initialState);
@@ -146,7 +142,7 @@ export default function GameOfLife() {
   };
 
   const handleSpeedChange = (newSpeed: number) => {
-    setState((prevState) => ({ ...prevState, speed: newSpeed }));
+    speed.value = newSpeed;
   };
 
   const handleRun = () => {
@@ -160,7 +156,7 @@ export default function GameOfLife() {
   useEffect(() => {
     let timerID = 0;
     if (state.isGameRunning) {
-      timerID = setInterval(() => handleStep(), state.speed);
+      timerID = setInterval(() => handleStep(), speed.value);
     }
     return () => clearInterval(timerID);
   });
@@ -173,15 +169,6 @@ export default function GameOfLife() {
       />
 
       <div className="flex justify-around my-2.5">
-        <div className="flex text-xs sm:text-base">
-          <IconPlus
-            onClick={() => handleSpeedChange(Math.max(state.speed - 50, 50))}
-          />
-          <Slider speed={state.speed} onSpeedChange={handleSpeedChange} />
-          <IconMinus
-            onClick={() => handleSpeedChange(Math.min(state.speed + 50, 1000))}
-          />
-        </div>
         <div className="text-lg sm:text-xl">
           {`Gen: ${state.generation}`}
         </div>

@@ -1,5 +1,6 @@
 import { Head } from "$fresh/runtime.ts";
 import GameOfLife from "../islands/GameOfLife.tsx";
+import SpeedSlider from "../islands/SpeedSlider.tsx";
 import Footer from "../islands/Footer.tsx";
 
 export default function Page() {
@@ -8,7 +9,7 @@ export default function Page() {
       <Head>
         <title>Fresh Game of Life</title>
       </Head>
-      <div className="transition-colors h-screen flex flex-col justify-center items-center font-mono bg-gray-200 dark:bg-gray-700 dark:text-white">
+      <body className="transition-colors h-screen flex flex-col justify-center items-center font-mono bg-gray-200 dark:bg-gray-700 dark:text-white">
         <div className="mb-2 sm:mb-3 flex flex-col items-center">
           <div>
             <a
@@ -32,10 +33,10 @@ export default function Page() {
 
         <div>
           <GameOfLife />
-
+          <SpeedSlider />
           <Footer />
         </div>
-      </div>
+      </body>
     </>
   );
 }
