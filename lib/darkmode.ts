@@ -1,7 +1,7 @@
 import { effect, signal } from "@preact/signals";
 
 export const isDarkMode = signal(
-  localStorage.theme === "dark" ||
+  (typeof localStorage !== undefined && localStorage.theme === "dark") ||
     (!("theme" in localStorage) &&
       typeof window.matchMedia !== "undefined" &&
       window.matchMedia("(prefers-color-scheme: dark)").matches),
