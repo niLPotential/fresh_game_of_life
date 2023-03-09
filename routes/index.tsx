@@ -1,4 +1,5 @@
 import { Head } from "$fresh/runtime.ts";
+import Footer from "../islands/Footer.tsx";
 
 export default function Home() {
   return (
@@ -6,7 +7,7 @@ export default function Home() {
       <Head>
         <title>Fresh Game Projects</title>
       </Head>
-      <ul>
+      <ul className="bg-gray-200 dark:bg-gray-700 dark:text-white">
         <li>
           <a href="game-of-life">Game of Life</a>
         </li>
@@ -20,6 +21,7 @@ export default function Home() {
           <a href="snake-game">Snake Game</a>
         </li>
       </ul>
+      <Footer />
     </>
   );
 }

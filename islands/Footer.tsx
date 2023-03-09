@@ -1,21 +1,11 @@
-import { useEffect, useState } from "preact/hooks";
+import { isDarkMode } from "../lib/darkmode.ts";
 import IconSunMoon from "https://deno.land/x/tabler_icons_tsx@0.0.2/tsx/sun-moon.tsx";
 import IconBrandGithub from "https://deno.land/x/tabler_icons_tsx@0.0.2/tsx/brand-github.tsx";
 
 export default function DarkMode() {
-  const [isDarkMode, setDarkMode] = useState(false);
-
   const handleDarkMode = () => {
-    setDarkMode((prevState) => !prevState);
+    isDarkMode.value = !isDarkMode.value;
   };
-
-  useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, [isDarkMode]);
 
   return (
     <div className="flex my-5 justify-evenly sm:justify-around">
