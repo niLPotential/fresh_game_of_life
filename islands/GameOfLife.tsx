@@ -3,9 +3,9 @@ import { useEffect, useState } from "preact/hooks";
 import { Button } from "../components/Button.tsx";
 import { Board } from "../lib/game_of_life.ts";
 import { speed } from "../lib/speed.ts";
-import template from "../static/template.json" assert {
-  type: "json",
-};
+import IconPlus from "https://deno.land/x/tabler_icons_tsx@0.0.2/tsx/plus.tsx";
+import IconMinus from "https://deno.land/x/tabler_icons_tsx@0.0.2/tsx/minus.tsx";
+import template from "../static/template.json" assert { type: "json" };
 
 export default function GameOfLife() {
   const [boardState, setBoardState] = useState(new Board());
@@ -79,6 +79,7 @@ export default function GameOfLife() {
       disabled: false,
     },
   ];
+
   return (
     <div>
       <Grid
@@ -87,16 +88,39 @@ export default function GameOfLife() {
       />
 
       <div className="flex justify-around my-2.5">
+        <SpeedSlider />
         <div className="text-lg sm:text-xl">
           {`Gen: ${boardState.generation}`}
         </div>
       </div>
-    
+
       <div className="flex justify-center sm:justify-between my-2.5">
         {buttonsList.map(({ name, onClick, disabled }) => (
           <Button onClick={onClick} disabled={disabled}>{name}</Button>
         ))}
       </div>
+    </div>
+  );
+}
+
+function SpeedSlider() {
+  return (
+    <div className="flex text-xs sm:text-base">
+      <IconPlus
+        onClick={() => speed.value = Math.max(speed.value - 50, 50)}
+      />
+      <input
+        type="range"
+        min="50"
+        max="1000"
+        step="50"
+        value={speed.value}
+        onChange={(e) =>
+          speed.value = (e.target as HTMLInputElement).valueAsNumber}
+      />
+      <IconMinus
+        onClick={() => speed.value = Math.min(speed.value + 50, 1000)}
+      />
     </div>
   );
 }

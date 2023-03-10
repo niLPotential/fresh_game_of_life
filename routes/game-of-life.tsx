@@ -1,6 +1,5 @@
 import { Head } from "$fresh/runtime.ts";
 import GameOfLife from "../islands/GameOfLife.tsx";
-import SpeedSlider from "../islands/SpeedSlider.tsx";
 import Footer from "../islands/Footer.tsx";
 
 export default function Page() {
@@ -33,7 +32,6 @@ export default function Page() {
 
         <div>
           <GameOfLife />
-          <SpeedSlider />
           <Footer />
         </div>
       </body>
