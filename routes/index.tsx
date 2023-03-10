@@ -7,8 +7,8 @@ export default function Home() {
       <Head>
         <title>Fresh Game Projects</title>
       </Head>
-      <body>
-        <ul className="transition-colors bg-gray-200 dark:bg-gray-700 dark:text-white">
+      <body className="bg-gray-200 dark:bg-gray-700 dark:text-white">
+        <ul>
           <li>
             <a href="game-of-life">Game of Life</a>
           </li>

@@ -1,28 +1,38 @@
-import { isDarkMode } from "../lib/darkmode.ts";
+import { useEffect, useState } from "preact/hooks";
+import { IS_BROWSER } from "$fresh/runtime.ts";
 import IconSunMoon from "https://deno.land/x/tabler_icons_tsx@0.0.2/tsx/sun-moon.tsx";
 import IconBrandGithub from "https://deno.land/x/tabler_icons_tsx@0.0.2/tsx/brand-github.tsx";
 
-export default function DarkMode() {
+export default function Footer() {
+  const [isDark, setDark] = useState(
+    IS_BROWSER
+      ? window.matchMedia("(prefers-color-scheme: dark)").matches
+      : true,
+  );
+
+  useEffect(() => {
+    isDark
+      ? document.documentElement.classList.add("dark")
+      : document.documentElement.classList.remove("dark");
+  });
+
   const handleDarkMode = () => {
-    isDarkMode.value = !isDarkMode.value;
+    setDark((prevState) => !prevState);
   };
 
   return (
-    <div className="flex my-5 justify-evenly sm:justify-around">
+    <div className="flex justify-evenly sm:justify-around items-center">
       <IconSunMoon onClick={handleDarkMode} />
-      <a
-        className="relative w-2/3 sm:w-1/2"
-        href="https://fresh.deno.dev"
-      >
+      <a href="https://fresh.deno.dev">
         <img
-          className="absolute inset-0 m-auto transition-opacity opacity-0 dark:opacity-100"
+          className="hidden dark:inline"
           width="197"
           height="37"
           src="https://fresh.deno.dev/fresh-badge-dark.svg"
           alt="Made with Fresh"
         />
         <img
-          className="absolute inset-0 m-auto transition-opacity dark:opacity-0"
+          className="dark:hidden"
           width="197"
           height="37"
           src="https://fresh.deno.dev/fresh-badge.svg"

@@ -8,7 +8,7 @@ export default function Page() {
       <Head>
         <title>Fresh Game of Life</title>
       </Head>
-      <body className="transition-colors h-screen flex flex-col justify-center items-center font-mono bg-gray-200 dark:bg-gray-700 dark:text-white">
+      <body className="h-screen flex flex-col justify-center items-center font-mono bg-gray-200 dark:bg-gray-700 dark:text-white">
         <div className="mb-2 sm:mb-3 flex flex-col items-center">
           <div>
             <a
