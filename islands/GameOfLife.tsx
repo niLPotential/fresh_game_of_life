@@ -1,161 +1,67 @@
 import { useEffect, useState } from "preact/hooks";
 import { BoardGrid } from "../components/game-of-life/Board.tsx";
 import { Button } from "../components/Button.tsx";
+import { Board } from "../lib/game_of_life.ts";
 import { speed } from "../lib/speed.ts";
 import template from "../static/template.json" assert {
   type: "json",
 };
 
-const totalBoardRows = 10;
-const totalBoardColumns = 10;
-
-export type BoardState = {
-  boardStatus: boolean[][];
-  generation: number;
-  isGameRunning: boolean;
-};
-
-const newBoardStatus = (cellStatus = () => Math.random() < 0.3) => {
-  const grid: boolean[][] = [];
-  for (let r = 0; r < totalBoardRows; r++) {
-    grid[r] = [];
-    for (let c = 0; c < totalBoardColumns; c++) {
-      grid[r][c] = cellStatus();
-    }
-  }
-  return grid;
-};
-
-const templateBoardStatus = (template: number[][]) => {
-  const grid = newBoardStatus(() => false);
-
-  for (const index of template) {
-    grid[index[0]][index[1]] = true;
-  }
-  return grid;
-};
-
 export default function GameOfLife() {
-  const initialState: BoardState = {
-    boardStatus: newBoardStatus(),
-    generation: 0,
-    isGameRunning: false,
-  };
-
-  const [state, setState] = useState(initialState);
+  const [boardState, setBoardState] = useState(new Board());
 
   const runStopButton = () => {
-    return state.isGameRunning
+    return boardState.isGameRunning
       ? <Button onClick={handleStop}>Stop</Button>
       : <Button onClick={handleRun}>Start</Button>;
   };
 
-  const handleClearBoard = () =>
-    setState((prevState) => ({
-      ...prevState,
-      boardStatus: newBoardStatus(() => false),
-      generation: 0,
-      isGameRunning: false,
-    }));
+  const handleClearBoard = () => setBoardState(new Board(() => false));
 
   const handleNewBoard = () => {
-    setState((prevState) => ({
-      ...prevState,
-      boardStatus: newBoardStatus(),
-      generation: 0,
-      isGameRunning: false,
-    }));
+    setBoardState(new Board());
   };
 
   const handleTemplateBoard = (template: number[][]) => {
-    setState((prevState) => ({
-      ...prevState,
-      boardStatus: templateBoardStatus(template),
-      generation: 0,
-      isGameRunning: false,
-    }));
+    setBoardState(Board.fromTemplate(template));
   };
 
   const handleToggleStatus = (r: number, c: number) => {
-    const toggleBoardStatus = (prevStatus: BoardState["boardStatus"]) => {
-      const clonedBoardStatus = JSON.parse(JSON.stringify(prevStatus));
-      clonedBoardStatus[r][c] = !clonedBoardStatus[r][c];
-      return clonedBoardStatus;
-    };
-
-    setState((prevState) => ({
-      ...prevState,
-      boardStatus: toggleBoardStatus(prevState["boardStatus"]),
-    }));
+    setBoardState((prevState) => {
+      const newState = prevState.clone();
+      newState.toggleCellStatus(r, c);
+      return newState;
+    });
   };
 
   const handleStep = () => {
-    const nextStep = (boardStatus: BoardState["boardStatus"]) => {
-      const clonedBoardStatus: BoardState["boardStatus"] = JSON.parse(
-        JSON.stringify(boardStatus),
-      );
-
-      const amountTrueNeighbors = (r: number, c: number) => {
-        const neighbors = [[-1, -1], [-1, 0], [-1, 1], [0, 1], [1, 1], [1, 0], [
-          1,
-          -1,
-        ], [0, -1]];
-        return neighbors.reduce((trueNeighbors, neighbor) => {
-          const x = r + neighbor[0];
-          const y = c + neighbor[1];
-          const isNeighborOnBoard = x >= 0 && x < totalBoardRows && y >= 0 &&
-            y < totalBoardColumns;
-          if (trueNeighbors < 4 && isNeighborOnBoard && boardStatus[x][y]) {
-            return trueNeighbors + 1;
-          } else {
-            return trueNeighbors;
-          }
-        }, 0);
-      };
-
-      for (let r = 0; r < totalBoardRows; r++) {
-        for (let c = 0; c < totalBoardColumns; c++) {
-          const totalTrueNeighbors = amountTrueNeighbors(r, c);
-
-          if (!boardStatus[r][c]) {
-            if (totalTrueNeighbors === 3) {
-              clonedBoardStatus[r][c] = true;
-            }
-          } else {
-            if (totalTrueNeighbors < 2 || totalTrueNeighbors > 3) {
-              clonedBoardStatus[r][c] = false;
-            }
-          }
-        }
-      }
-
-      return clonedBoardStatus;
-    };
-
-    setState((prevState) => ({
-      ...prevState,
-      boardStatus: nextStep(
-        prevState["boardStatus"],
-      ),
-      generation: prevState.generation + 1,
-    }));
-  };
-
-  const handleSpeedChange = (newSpeed: number) => {
-    speed.value = newSpeed;
+    setBoardState((prevState) => {
+      const newState = prevState.clone();
+      newState.nextStep();
+      newState.generation++;
+      return newState;
+    });
   };
 
   const handleRun = () => {
-    setState((prevState) => ({ ...prevState, isGameRunning: true }));
+    setBoardState((prevState) => {
+      const newState = prevState.clone();
+      newState.isGameRunning = true;
+      return newState;
+    });
   };
 
   const handleStop = () => {
-    setState((prevState) => ({ ...prevState, isGameRunning: false }));
+    setBoardState((prevState) => {
+      const newState = prevState.clone();
+      newState.isGameRunning = false;
+      return newState;
+    });
   };
 
   useEffect(() => {
     let timerID = 0;
-    if (state.isGameRunning) {
+    if (boardState.isGameRunning) {
       timerID = setInterval(() => handleStep(), speed.value);
     }
     return () => clearInterval(timerID);
@@ -164,13 +70,13 @@ export default function GameOfLife() {
   return (
     <div>
       <BoardGrid
-        boardStatus={state.boardStatus}
+        boardStatus={boardState.status}
         onToggleCellStatus={handleToggleStatus}
       />
 
       <div className="flex justify-around my-2.5">
         <div className="text-lg sm:text-xl">
-          {`Gen: ${state.generation}`}
+          {`Gen: ${boardState.generation}`}
         </div>
       </div>
 
@@ -178,7 +84,7 @@ export default function GameOfLife() {
         {runStopButton()}
 
         <Button
-          disabled={state.isGameRunning}
+          disabled={boardState.isGameRunning}
           onClick={handleStep}
         >
           Next
