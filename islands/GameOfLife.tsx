@@ -1,5 +1,5 @@
+import { JSX } from "preact";
 import { useEffect, useState } from "preact/hooks";
-import { BoardGrid } from "../components/game-of-life/Board.tsx";
 import { Button } from "../components/Button.tsx";
 import { Board } from "../lib/game_of_life.ts";
 import { speed } from "../lib/speed.ts";
@@ -69,9 +69,9 @@ export default function GameOfLife() {
 
   return (
     <div>
-      <BoardGrid
-        boardStatus={boardState.status}
-        onToggleCellStatus={handleToggleStatus}
+      <Grid
+        status={boardState.status}
+        onToggleStatus={handleToggleStatus}
       />
 
       <div className="flex justify-around my-2.5">
@@ -115,5 +115,37 @@ export default function GameOfLife() {
         </Button>
       </div>
     </div>
+  );
+}
+
+function Grid(
+  { status, onToggleStatus }: {
+    status: boolean[][];
+    onToggleStatus: (r: number, c: number) => void;
+  },
+) {
+  const handleClick = (r: number, c: number) => onToggleStatus(r, c);
+
+  const tr: JSX.Element[] = [];
+  status.forEach((row, rowIndex) => {
+    const td: JSX.Element[] = [];
+    row.forEach((cell, columnIndex) => {
+      td.push(
+        <td
+          key={`${rowIndex},${columnIndex}`}
+          className={`border w-8 h-8 sm:w-10 sm:h-10 ${
+            cell ? "bg-black hover:bg-red-500" : "bg-white hover:bg-gray-500"
+          }`}
+          onClick={() => handleClick(rowIndex, columnIndex)}
+        />,
+      );
+    });
+    tr.push(<tr key={rowIndex}>{td}</tr>);
+  });
+
+  return (
+    <table className="flex justify-center">
+      <tbody>{tr}</tbody>
+    </table>
   );
 }
