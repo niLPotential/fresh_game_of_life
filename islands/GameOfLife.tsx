@@ -10,12 +10,6 @@ import template from "../static/template.json" assert {
 export default function GameOfLife() {
   const [boardState, setBoardState] = useState(new Board());
 
-  const runStopButton = () => {
-    return boardState.isGameRunning
-      ? <Button onClick={handleStop}>Stop</Button>
-      : <Button onClick={handleRun}>Start</Button>;
-  };
-
   const handleClearBoard = () => setBoardState(new Board(() => false));
 
   const handleNewBoard = () => {
@@ -67,6 +61,24 @@ export default function GameOfLife() {
     return () => clearInterval(timerID);
   });
 
+  const buttonsList = [
+    boardState.isGameRunning
+      ? { name: "Stop", onClick: handleStop, disabled: false }
+      : { name: "Run", onClick: handleRun, disabled: false },
+    { name: "Next", onClick: handleStep, disabled: boardState.isGameRunning },
+    { name: "Clear", onClick: handleClearBoard, disabled: false },
+    { name: "New", onClick: handleNewBoard, disabled: false },
+    {
+      name: "Deno",
+      onClick: () => handleTemplateBoard(template.deno),
+      disabled: false,
+    },
+    {
+      name: "Fresh",
+      onClick: () => handleTemplateBoard(template.fresh),
+      disabled: false,
+    },
+  ];
   return (
     <div>
       <Grid
@@ -79,40 +91,11 @@ export default function GameOfLife() {
           {`Gen: ${boardState.generation}`}
         </div>
       </div>
-
+    
       <div className="flex justify-center sm:justify-between my-2.5">
-        {runStopButton()}
-
-        <Button
-          disabled={boardState.isGameRunning}
-          onClick={handleStep}
-        >
-          Next
-        </Button>
-
-        <Button
-          onClick={handleClearBoard}
-        >
-          Clear
-        </Button>
-
-        <Button
-          onClick={handleNewBoard}
-        >
-          New
-        </Button>
-
-        <Button
-          onClick={() => handleTemplateBoard(template.deno)}
-        >
-          Deno
-        </Button>
-
-        <Button
-          onClick={() => handleTemplateBoard(template.fresh)}
-        >
-          Fresh
-        </Button>
+        {buttonsList.map(({ name, onClick, disabled }) => (
+          <Button onClick={onClick} disabled={disabled}>{name}</Button>
+        ))}
       </div>
     </div>
   );
