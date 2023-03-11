@@ -14,6 +14,11 @@ deno task start
 
 This will watch the project directory and restart as necessary.
 
+## Dark Mode
+
+Implemented based on [Tailwind docs](https://tailwindcss.com/docs/dark-mode) and
+[Josh Comeau](https://www.joshwcomeau.com/react/dark-mode/)
+
 ## Game of Life
 
 Conway's Game of Life, based on
@@ -21,8 +26,8 @@ Conway's Game of Life, based on
 
 ## 2048 (WIP)
 
-The 2048 puzzle game, mostly based on
-[the original repo](https://github.com/gabrielecirulli/2048), with adjustments
+The 2048 puzzle game, based on
+[the original repo](https://github.com/gabrielecirulli/2048)
 
 ## Snake Game (WIP)
 

@@ -1,20 +1,44 @@
+import { Head } from "$fresh/runtime.ts";
 import { useEffect, useState } from "preact/hooks";
 import { IS_BROWSER } from "$fresh/runtime.ts";
 import IconSunMoon from "https://deno.land/x/tabler_icons_tsx@0.0.2/tsx/sun-moon.tsx";
 import IconBrandGithub from "https://deno.land/x/tabler_icons_tsx@0.0.2/tsx/brand-github.tsx";
 
 export default function Footer() {
+  // inject script in 'head' to avoid FOUC
+  const script = `switch (localStorage.theme) {
+    case 'dark':
+      document.documentElement.classList.add('dark');
+      break;
+    case 'light':
+      document.documentElement.classList.remove('dark');
+      break;
+    default:
+      window.matchMedia('(prefers-color-scheme: dark)').matches
+        ? document.documentElement.classList.add('dark')
+        : document.documentElement.classList.remove('dark');
+      break;
+  }`;
+
   const [isDark, setDark] = useState(
     IS_BROWSER
-      ? window.matchMedia("(prefers-color-scheme: dark)").matches
-      : true,
+      ? localStorage.theme === "dark"
+        ? true
+        : localStorage.theme === "light"
+        ? false
+        : window.matchMedia("(prefers-color-scheme: dark)").matches
+      : false,
   );
 
   useEffect(() => {
-    isDark
-      ? document.documentElement.classList.add("dark")
-      : document.documentElement.classList.remove("dark");
-  });
+    if (isDark) {
+      localStorage.theme = "dark";
+      document.documentElement.classList.add("dark");
+    } else {
+      localStorage.theme = "light";
+      document.documentElement.classList.remove("dark");
+    }
+  }, [isDark]);
 
   const handleDarkMode = () => {
     setDark((prevState) => !prevState);
@@ -22,6 +46,9 @@ export default function Footer() {
 
   return (
     <div className="flex justify-evenly sm:justify-around items-center">
+      <Head>
+        <script>{script}</script>
+      </Head>
       <IconSunMoon onClick={handleDarkMode} />
       <a href="https://fresh.deno.dev">
         <img
