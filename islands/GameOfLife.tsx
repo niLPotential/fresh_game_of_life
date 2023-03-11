@@ -1,5 +1,6 @@
 import { JSX } from "preact";
 import { useEffect, useState } from "preact/hooks";
+import { IS_BROWSER } from "$fresh/runtime.ts";
 import { Button } from "../components/Button.tsx";
 import { Board } from "../lib/game_of_life.ts";
 import { speed } from "../lib/speed.ts";
@@ -8,7 +9,9 @@ import IconMinus from "https://deno.land/x/tabler_icons_tsx@0.0.2/tsx/minus.tsx"
 import template from "../static/template.json" assert { type: "json" };
 
 export default function GameOfLife() {
-  const [boardState, setBoardState] = useState(new Board());
+  const [boardState, setBoardState] = useState(
+    IS_BROWSER ? new Board() : new Board(() => false),
+  );
 
   const handleClearBoard = () => setBoardState(new Board(() => false));
 
@@ -140,7 +143,7 @@ function Grid(
       td.push(
         <td
           key={`${rowIndex},${columnIndex}`}
-          className={`border w-8 h-8 sm:w-10 sm:h-10 ${
+          className={`border w-8 h-8 sm:w-10 sm:h-10 transition-colors ${
             cell ? "bg-black hover:bg-red-500" : "bg-white hover:bg-gray-500"
           }`}
           onClick={() => handleClick(rowIndex, columnIndex)}
