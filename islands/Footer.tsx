@@ -50,7 +50,7 @@ export default function Footer() {
         <script>{script}</script>
       </Head>
       <IconSunMoon onClick={handleDarkMode} />
-      <a href="https://fresh.deno.dev">
+      <a href="https://fresh.deno.dev" target="_blank">
         <img
           className="hidden dark:inline"
           width="197"
