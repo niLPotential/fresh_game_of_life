@@ -8,7 +8,7 @@ export class Tile {
   y: number;
   value: number | 2;
   previousPosition: Position | null;
-  mergedFrom: null; // Tracks tiles that merged together
+  mergedFrom: Tile[] | null; // Tracks tiles that merged together
 
   constructor(position: Position, value: number) {
     this.x = position.x;

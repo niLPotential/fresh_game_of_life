@@ -1,11 +1,25 @@
+import { GameManager } from "../lib/game_manager.ts";
 import { Grid } from "../lib/grid.ts";
 
 export default function TwoZeroFourEight() {
-  const grid = new Grid(4);
+  const gameManager = new GameManager();
+  gameManager.addStartTiles();
 
   return (
     <div>
-      {grid.cells[0]}
+      <Board grid={gameManager.grid} />
     </div>
   );
+}
+
+function Board({ grid }: { grid: Grid }) {
+  const tileList = grid.cells.map((row) =>
+    row.map((tile) => <Tile value={tile ? tile.value : 0} />)
+  );
+
+  return <div>{tileList}</div>;
+}
+
+function Tile({ value }: { value: number }) {
+  return <div>{value}</div>;
 }

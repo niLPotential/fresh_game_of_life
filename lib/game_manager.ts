@@ -7,13 +7,17 @@ type Vector = {
 };
 
 export class GameManager {
-  size: number;
   startTiles = 2;
   grid: Grid;
+  score: number;
+  over: boolean;
+  won: boolean;
 
-  constructor(size: number) {
-    this.size = size;
-    this.grid = new Grid(this.size);
+  constructor() {
+    this.grid = new Grid();
+    this.score = 0;
+    this.over = false;
+    this.won = false;
   }
 
   // Set up the initial tiles to start the game with
@@ -50,7 +54,56 @@ export class GameManager {
     tile.updatePosition(cell);
   };
 
-  move = () => {};
+  move = (direction: number) => {
+    const vector = this.getVector(direction);
+    const traversals = this.buildTraversals(vector);
+    let moved = false;
+
+    this.prepareTiles();
+
+    traversals.x.forEach((x) => {
+      traversals.y.forEach((y) => {
+        const cell = { x, y };
+        const tile = this.grid.cellContent(cell);
+
+        if (tile) {
+          const positions = this.findFarthestPosition(cell, vector);
+          const next = this.grid.cellContent(positions.next);
+
+          // Only one merger per row traversal?
+          if (next && next.value == tile.value && !next.mergedFrom) {
+            const merged = new Tile(positions.next, tile.value * 2);
+            merged.mergedFrom = [tile, next];
+
+            this.grid.insertTile(merged);
+            this.grid.removeTile(tile);
+
+            // Converge the two tiles' positions
+            tile.updatePosition(positions.next);
+
+            // Update the score
+            this.score += merged.value;
+
+            // The mighty 2048 tile
+            if (merged.value == 2048) this.won = true;
+          } else {
+            this.moveTile(tile, positions.farthest);
+          }
+
+          if (!this.positionsEqual(cell, tile)) {
+            moved = true; // This tile moved from its original cell!
+          }
+        }
+      });
+    });
+
+    if (moved) {
+      this.addRandomTile();
+      if (!this.movesAvailable()) {
+        this.over = true; // Game over!
+      }
+    }
+  };
 
   // Get the vector representing the chosen direction
   getVector = (direction: number): Vector => {
@@ -72,7 +125,7 @@ export class GameManager {
   buildTraversals = (vector: Vector) => {
     const traversals: { x: number[]; y: number[] } = { x: [], y: [] };
 
-    for (let pos = 0; pos < this.size; pos++) {
+    for (let pos = 0; pos < Grid.size; pos++) {
       traversals.x.push(pos);
       traversals.y.push(pos);
     }
@@ -107,8 +160,8 @@ export class GameManager {
 
   // Check for available matches between tiles (more expensive check)
   tileMatchesAvailable = () => {
-    for (let x = 0; x < this.size; x++) {
-      for (let y = 0; y < this.size; y++) {
+    for (let x = 0; x < Grid.size; x++) {
+      for (let y = 0; y < Grid.size; y++) {
         const tile = this.grid.cellContent({ x, y });
 
         if (tile) {
@@ -126,5 +179,9 @@ export class GameManager {
       }
     }
     return false;
+  };
+
+  positionsEqual = (first: Position, second: Position) => {
+    return first.x === second.x && first.y === second.y;
   };
 }

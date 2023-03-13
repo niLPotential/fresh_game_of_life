@@ -1,22 +1,21 @@
 import { Position, Tile } from "./tile.ts";
 
 export class Grid {
-  size: number;
+  static size = 4;
   cells: (Tile | null)[][];
 
-  constructor(size: number) {
-    this.size = size;
-    this.cells = this.empty();
+  constructor() {
+    this.cells = Grid.empty();
   }
 
   // Build a grid of the specified size
-  empty = () => {
+  static empty = () => {
     const cells = [];
 
-    for (let x = 0; x < this.size; x++) {
+    for (let x = 0; x < Grid.size; x++) {
       const row = [];
 
-      for (let y = 0; y < this.size; y++) {
+      for (let y = 0; y < Grid.size; y++) {
         row.push(null);
       }
 
@@ -53,8 +52,8 @@ export class Grid {
   eachCell = (
     callback: (x: number, y: number, tile: Tile | null) => void,
   ) => {
-    for (let x = 0; x < this.size; x++) {
-      for (let y = 0; y < this.size; y++) {
+    for (let x = 0; x < Grid.size; x++) {
+      for (let y = 0; y < Grid.size; y++) {
         callback(x, y, this.cells[x][y]);
       }
     }
@@ -92,7 +91,7 @@ export class Grid {
   };
 
   withinBounds = (position: Position) => {
-    return position.x >= 0 && position.x < this.size &&
-      position.y >= 0 && position.y < this.size;
+    return position.x >= 0 && position.x < Grid.size &&
+      position.y >= 0 && position.y < Grid.size;
   };
 }
