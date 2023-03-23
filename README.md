@@ -22,13 +22,14 @@ Implemented based on [Tailwind docs](https://tailwindcss.com/docs/dark-mode) and
 ## Game of Life
 
 Conway's Game of Life, based on
-[this freeCodeCamp article](https://www.freecodecamp.org/news/coding-the-game-of-life-with-react-7de2385b7356/)
+[Pablo Regen](https://www.freecodecamp.org/news/coding-the-game-of-life-with-react-7de2385b7356/)
 
 ## 2048 (WIP)
 
 The 2048 puzzle game, based on
-[the original repo](https://github.com/gabrielecirulli/2048)
+[Gabriele Cirulli's original repo](https://github.com/gabrielecirulli/2048) and
+[Matt Sokola](https://www.freecodecamp.org/news/how-to-make-2048-game-in-react/)
 
 ## Snake Game (WIP)
 
-Classic Snake game
+Classic Snake game, based on 
