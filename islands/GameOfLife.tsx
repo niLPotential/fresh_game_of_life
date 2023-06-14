@@ -6,7 +6,7 @@ import { Board } from "../lib/game_of_life.ts";
 import { speed } from "../lib/speed.ts";
 import IconPlus from "https://deno.land/x/tabler_icons_tsx@0.0.2/tsx/plus.tsx";
 import IconMinus from "https://deno.land/x/tabler_icons_tsx@0.0.2/tsx/minus.tsx";
-import template from "../static/template.json" assert { type: "json" };
+import { denoTemplate, freshTemplate } from "../static/template.ts";
 
 export default function GameOfLife() {
   const [boardState, setBoardState] = useState(
@@ -73,12 +73,12 @@ export default function GameOfLife() {
     { name: "New", onClick: handleNewBoard, disabled: false },
     {
       name: "Deno",
-      onClick: () => handleTemplateBoard(template.deno),
+      onClick: () => handleTemplateBoard(denoTemplate),
       disabled: false,
     },
     {
       name: "Fresh",
-      onClick: () => handleTemplateBoard(template.fresh),
+      onClick: () => handleTemplateBoard(freshTemplate),
       disabled: false,
     },
   ];
